@@ -1,10 +1,15 @@
-FROM ubuntu:22.04
+FROM node:22-alpine
 
-RUN apt update
-RUN apt install apache2 -y
+WORKDIR /opt
 
-RUN echo "<h1> Hello, World!" > /var/www/html/index.html
+COPY . .
+
+RUN npm install && npm run build
+
+RUN apk add apache2
+
+RUN cp -rf dist/* /var/www/localhost/htdocs/
 
 EXPOSE 80
 
-CMD ["apache2ctl", "-D", "FOREGROUND"] 
+CMD ["httpd", "-D", "FOREGROUND"]

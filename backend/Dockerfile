@@ -1,24 +1,11 @@
-FROM ubuntu:22.04
-LABEL name Nabilqureshi446
- 
-
-USER root
-# VOLUME ["/var/www/html"]
-
-RUN apt update && apt install openjdk-17-jdk git maven -y
+FROM maven:3.8.3-openjdk-17
 
 WORKDIR /opt
 
-RUN git clone https://github.com/Nabilqureshi446/EasyCRUD.git
-
-WORKDIR EasyCRUD/backend
-
-COPY application.properties src/main/resources/application.properties
-# ADD <URL> <DEST>
+COPY . .
 
 RUN mvn clean package -DskipTests
 
 EXPOSE 8080
 
-# CMD ["java", "-jar", "target/EasyCRUD-1.0-SNAPSHOT.jar"]
-ENTRYPOINT ["java", "-jar", "target/student-registration-backend-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/student-registration-backend-0.0.1-SNAPSHOT.jar"
