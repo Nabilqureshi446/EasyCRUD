@@ -1,0 +1,34 @@
+version: '3.9'
+services :
+    database:
+        image: mariadb:latest
+        ports :
+            - "3306:3306"
+        environment :
+            MARIADB_ROOT_PASSWORD: redhat
+            MARIADB_DATABASE: student_db
+            
+        volumes:
+          - ./data:/var/lib/mariadb 
+
+
+    backend:
+            build: ./backend
+            ports:
+             - "8080:8080"
+      
+            environment:
+                 DB_HOST: database
+                 DB_PORT: 3306
+                 DB_NAME: student_db
+                 DB_USER: root
+                 DB_PASSWORD: redhat
+                 DB_ROOT_PASSWORD: redhat
+            depends_on:
+              - database
+    frontend:
+         build: ./frontend
+         ports:
+              - "80:80"
+         depends_on:
+              - backend
